@@ -1,0 +1,99 @@
+/* src/style/navbar.css - style giống Mioto */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 72px;
+    padding: 0 24px;
+
+    background: #ffffff;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    color: #111827;
+    font-size: 20px;
+}
+
+.brand-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #22c55e;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 900;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.nav-right a {
+    color: #111827;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.nav-right a:hover {
+    color: #22c55e;
+}
+
+.nav-divider {
+    width: 1px;
+    height: 20px;
+    background: #e5e7eb;
+    margin: 0 6px;
+}
+
+.nav-btn {
+    border: 1px solid #111827;
+    background: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.nav-btn:hover {
+    border-color: #22c55e;
+    color: #22c55e;
+}
+
+.nav-ghost {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.nav-ghost:hover {
+    border-color: #22c55e;
+    color: #22c55e;
+}

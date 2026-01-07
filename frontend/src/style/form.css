@@ -1,0 +1,16 @@
+.form {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+input {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+input:focus {
+    border-color: #1f6feb;
+}

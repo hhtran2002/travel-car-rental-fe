@@ -1,0 +1,63 @@
+/* Reset + base */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: #0f172a;
+    background: #fff;
+    overflow-x: hidden;
+    /* chống lệch/scroll ngang do element rộng hơn màn hình */
+}
+
+/* Link & form */
+a {
+    color: inherit;
+    text-decoration: none;
+    /* tránh gạch chân mặc định (footer hay bị xấu vì cái này) */
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+/* container chuẩn */
+.container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* Giữ footer luôn dưới cùng khi trang ít nội dung */
+#root {
+    min-height: 100vh;
+}
+
+.appShell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.appMain {
+    flex: 1;
+    padding: 24px 0;
+    /* tạo khoảng thở giữa nội dung và navbar/footer */
+}
+
+/* Responsive nhẹ */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 12px;
+    }
+}

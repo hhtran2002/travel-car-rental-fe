@@ -1,0 +1,182 @@
+/* src/style/register.css */
+
+.mioto-auth-wrap {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 12px;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+/* overlay tối như Mioto */
+.mioto-auth-wrap::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.mioto-modal {
+    position: relative;
+    z-index: 2;
+    width: 520px;
+    max-width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    padding: 22px 22px 18px;
+}
+
+.mioto-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mioto-title {
+    margin: 6px 0 14px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.mioto-form {
+    display: grid;
+    gap: 12px;
+}
+
+.mioto-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #374151;
+    font-weight: 600;
+}
+
+.mioto-input {
+    width: 100%;
+    padding: 12px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    background: #fff;
+}
+
+.mioto-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+}
+
+.mioto-pass {
+    position: relative;
+}
+
+.mioto-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #6b7280;
+}
+
+.mioto-error {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #dc2626;
+}
+
+.mioto-alert {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #be123c;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.mioto-check {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #374151;
+    margin-top: 2px;
+}
+
+.mioto-check input {
+    margin-top: 3px;
+}
+
+.mioto-check a {
+    color: #16a34a;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.mioto-btn {
+    width: 100%;
+    margin-top: 6px;
+    padding: 13px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.mioto-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mioto-social {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.mioto-social button {
+    padding: 11px 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.mioto-footer {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.mioto-footer a {
+    color: #16a34a;
+    font-weight: 800;
+    text-decoration: none;
+}
