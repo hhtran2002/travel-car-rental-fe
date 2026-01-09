@@ -1,80 +1,103 @@
-// src/App.jsx
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+
 import Navbar from "./component/Navbar";
 import ProtectedRoute from "./component/ProtectedRoute";
 import Footer from "./component/Footer";
 
 // Pages
-import Home from "./page/Home";
-import OwnerRegisterGuide from "./page/OwnerRegisterGuide";
-import Login from "./page/Login";
-import Register from "./page/Register";
-import ForgotPassword from "./page/ForgotPassword";
-import ResetPassword from "./page/ResetPassword";
-import AdminCustomers from "./page/AdminCustomers";
-import NotFound from "./page/NotFound";
+import Home from "./pages/Home";
+import OwnerRegisterGuide from "./pages/OwnerRegisterGuide";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import AdminCustomers from "./pages/AdminCustomers";
+import NotFound from "./pages/NotFound";
 
 // Car pages
-import CarList from "./page/CarList";
-import CarDetail from "./page/CarDetail";
+import CarList from "./pages/CarList";
+import CarDetail from "./pages/CarDetail";
+
+// Driver
+import DriverLayout from "./layouts/DriverLayout";
+import DriverDashboard from "./pages/driver/DriverDashboard";
+import TripHistory from "./pages/driver/TripHistory";
+
+// Admin
+import AdminLayout from "./layouts/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminCarList from "./pages/admin/AdminCarList";
+import AdminBookingList from "./pages/admin/AdminBookingList";
 
 export default function App() {
   const location = useLocation();
-  const backgroundLocation = location.state?.backgroundLocation;
 
   return (
-    <div className="appShell">
+    <>
       <Navbar />
 
-      <main className="appMain">
-        <div className="container">
-          <Routes location={backgroundLocation || location}>
-            {/* Home */}
-            <Route path="/" element={<Home />} />
+      <Routes location={location}>
+        {/* Public routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/cars" element={<CarList />} />
+        <Route path="/cars/:id" element={<CarDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
-            {/* Cars */}
-            <Route path="/cars" element={<CarList />} />
-            <Route path="/cars/:id" element={<CarDetail />} />
+        {/* Driver routes */}
+        <Route
+          path="/driver"
+          element={
+            <ProtectedRoute role="DRIVER">
+              <DriverLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<DriverDashboard />} />
+          <Route path="history" element={<TripHistory />} />
+        </Route>
 
-            {/* Owner */}
-            <Route
-              path="/owner/register-guide"
-              element={<OwnerRegisterGuide />}
-            />
+        {/* Admin routes */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute role="ADMIN">
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="cars" element={<AdminCarList />} />
+          <Route path="bookings" element={<AdminBookingList />} />
 
-            {/* Auth */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+          <Route
+            path="customers"
+            element={
+              <div className="text-gray-500 dark:text-white">
+                Quản lý Khách hàng (Coming Soon)
+              </div>
+            }
+          />
 
-            {/* Admin */}
-            <Route
-              path="/admin/customers"
-              element={
-                <ProtectedRoute allowRoles={["admin"]}>
-                  <AdminCustomers />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="contracts"
+            element={
+              <div className="text-gray-500 dark:text-white">
+                Quản lý Hợp đồng (Coming Soon)
+              </div>
+            }
+          />
 
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-      </main>
+          <Route path="*" element={<Navigate to="/admin" />} />
+        </Route>
 
-      {/* Modal routes (login/register overlay) */}
-      {backgroundLocation && (
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-        </Routes>
-      )}
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
 
       <Footer />
-    </div>
+    </>
   );
 }
