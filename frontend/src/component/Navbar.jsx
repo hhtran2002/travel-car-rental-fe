@@ -39,7 +39,6 @@ export default function Navbar() {
 
             <div className="nav-right">
                 <Link to="/">Giới thiệu</Link>
-                <Link to="/owner/register-guide">Trở thành chủ xe</Link>
 
                 <span className="nav-divider" />
 
@@ -69,7 +68,7 @@ export default function Navbar() {
 
                 {token && (
                     <button className="nav-ghost" onClick={onLogout}>
-                        Logout
+                        Đăng xuất
                     </button>
                 )}
             </div>

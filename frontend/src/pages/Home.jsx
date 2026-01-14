@@ -85,13 +85,6 @@ export default function Home() {
                             >
                                 👨‍✈️ Xe có tài xế
                             </button>
-                            <button
-                                className={mode === "long" ? "tab active" : "tab"}
-                                onClick={() => setMode("long")}
-                                type="button"
-                            >
-                                🗓️ Thuê dài hạn
-                            </button>
                         </div>
 
                         <div className="searchCard">

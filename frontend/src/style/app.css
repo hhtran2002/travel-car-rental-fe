@@ -34,8 +34,8 @@ textarea {
 /* container chuẩn */
 .container {
     max-width: 1180px;
-    margin: 0 auto;
-    padding: 0 16px;
+    margin: 16px auto;
+    padding: 16px 16px;
 }
 
 /* Giữ footer luôn dưới cùng khi trang ít nội dung */

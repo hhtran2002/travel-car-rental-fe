@@ -49,32 +49,7 @@ export default function Footer() {
                             </div>
                         </div>
 
-                        <div className="tcrFooter__contact">
-                            <div className="tcrFooter__contactRow">
-                                <span className="k">Hotline</span>
-                                <span className="v">0900 000 000</span>
-                            </div>
-                            <div className="tcrFooter__contactRow">
-                                <span className="k">Hỗ trợ</span>
-                                <span className="v muted">07:00 - 22:00</span>
-                            </div>
-                            <div className="tcrFooter__contactRow">
-                                <span className="k">Email</span>
-                                <span className="v">support@travelcarrental.vn</span>
-                            </div>
-                        </div>
 
-                        <div className="tcrFooter__social">
-                            <a className="tcrFooter__socialBtn" href="#" aria-label="Facebook">
-                                <IconFacebook />
-                            </a>
-                            <a className="tcrFooter__socialBtn" href="#" aria-label="TikTok/Zalo">
-                                <IconZalo />
-                            </a>
-                            <a className="tcrFooter__socialBtn" href="#" aria-label="Youtube">
-                                <IconYoutube />
-                            </a>
-                        </div>
                     </div>
 
                     {/* Policy */}
@@ -82,9 +57,6 @@ export default function Footer() {
                         <div className="tcrFooter__title">Chính sách</div>
                         <ul className="tcrFooter__list">
                             <li><Link className="tcrFooter__link" to="#">Chính sách & quy định</Link></li>
-                            <li><Link className="tcrFooter__link" to="#">Chính sách bảo mật</Link></li>
-                            <li><Link className="tcrFooter__link" to="#">Giải quyết khiếu nại</Link></li>
-                            <li><Link className="tcrFooter__link" to="#">Điều khoản sử dụng</Link></li>
                         </ul>
                     </div>
 
@@ -95,50 +67,12 @@ export default function Footer() {
                             <li><Link className="tcrFooter__link" to="/">Trang chủ</Link></li>
                             <li><Link className="tcrFooter__link" to="#">Hướng dẫn đặt xe</Link></li>
                             <li><Link className="tcrFooter__link" to="#">Hướng dẫn thanh toán</Link></li>
-                            <li><Link className="tcrFooter__link" to="/owner/register-guide">Trở thành chủ xe</Link></li>
                         </ul>
-                    </div>
-
-                    {/* Services mapped from DB (hiển thị theo nghiệp vụ, không show tên bảng lộ liễu) */}
-                    <div className="tcrFooter__col">
-                        <div className="tcrFooter__title">Dịch vụ</div>
-                        <ul className="tcrFooter__list">
-                            <li><span className="tcrFooter__dot" /> Đặt xe & quản lý chuyến đi</li>
-                            <li><span className="tcrFooter__dot" /> Danh sách xe (hãng, loại, ảnh)</li>
-                            <li><span className="tcrFooter__dot" /> Thuê xe có tài xế (tuỳ chọn)</li>
-                            <li><span className="tcrFooter__dot" /> Khuyến mãi & mã giảm giá</li>
-                            <li><span className="tcrFooter__dot" /> Hợp đồng & thanh toán</li>
-                            <li><span className="tcrFooter__dot" /> Bảng giá theo quy tắc</li>
-                        </ul>
-
                     </div>
                 </div>
 
-                <div className="tcrFooter__divider" />
-
-                <div className="tcrFooter__bottom">
-                    <div className="tcrFooter__copy">
-                        © 2025 Travel Car Rental. All rights reserved.
-                    </div>
-
-                    <div className="tcrFooter__bottomRight">
-                        <div className="tcrFooter__miniLinks">
-                            <Link to="#" className="mini">Chính sách</Link>
-                            <span className="sep">•</span>
-                            <Link to="#" className="mini">Điều khoản</Link>
-                        </div>
-
-                        <div className="tcrFooter__payments">
-                            <span className="payTitle">Phương thức thanh toán:</span>
-                            <span className="payPill">MoMo</span>
-                            <span className="payPill">VNPay</span>
-
-
-                            <span className="payPill">Tiền mặt</span>
-                        </div>
-                    </div>
+               
                 </div>
-            </div>
         </footer>
     );
 }
