@@ -1,0 +1,32 @@
+.booking-detail {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 24px;
+}
+
+.booking-detail h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.contract-box {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.contract-box p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.booking-detail button {
+  margin-top: 20px;
+  padding: 10px 16px;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}

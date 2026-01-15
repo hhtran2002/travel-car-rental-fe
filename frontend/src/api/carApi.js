@@ -12,6 +12,7 @@ export const searchCars = async (params) => {
 };
 
 export const getCarDetail = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`);
+  const res = await fetch(`http://localhost:8080/api/cars/${id}`);
+  if (!res.ok) throw new Error("Không tìm thấy xe");
   return res.json();
 };
