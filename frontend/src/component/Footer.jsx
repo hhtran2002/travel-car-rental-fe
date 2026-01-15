@@ -56,7 +56,7 @@ export default function Footer() {
                     <div className="tcrFooter__col">
                         <div className="tcrFooter__title">Chính sách</div>
                         <ul className="tcrFooter__list">
-                            <li><Link className="tcrFooter__link" to="#">Chính sách & quy định</Link></li>
+                            <Link to="/terms">Điều khoản & Chính sách</Link>
                         </ul>
                     </div>
 

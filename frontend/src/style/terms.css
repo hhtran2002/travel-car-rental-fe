@@ -1,0 +1,165 @@
+/* =========================
+   TERMS PAGE - GREEN THEME
+   ========================= */
+
+.termsPage {
+    width: 100%;
+    min-height: 100vh;
+    background: #f9fafb;
+    padding: 48px 16px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+.termsContainer {
+    width: 100%;
+    max-width: 900px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px 42px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== TITLE ===== */
+.termsContainer h1 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 36px;
+}
+
+/* =========================
+   ACCORDION SECTION
+   ========================= */
+
+.termsSection {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    background: #ffffff;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.termsSection.open {
+    border-color: #16a34a;
+    box-shadow: 0 8px 20px rgba(22, 163, 74, 0.15);
+}
+
+/* ===== HEADER ===== */
+.termsSection h2 {
+    cursor: pointer;
+    padding: 18px 22px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+.termsSection h2:hover {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+/* ===== ARROW ===== */
+.arrow {
+    font-size: 18px;
+    color: #16a34a;
+    transition: transform 0.3s ease;
+}
+
+.termsSection.open .arrow {
+    transform: rotate(180deg);
+}
+
+/* =========================
+   CONTENT
+   ========================= */
+
+.termsContent {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 22px;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+}
+
+.termsSection.open .termsContent {
+    max-height: 500px;
+    opacity: 1;
+    padding-bottom: 18px;
+}
+
+/* ===== TEXT ===== */
+.termsContent p {
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: #374151;
+    margin: 12px 0 0;
+}
+
+/* ===== LIST ===== */
+.termsContent ul {
+    margin: 12px 0 0;
+    padding-left: 20px;
+}
+
+.termsContent li {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+/* =========================
+   UPDATED TIME
+   ========================= */
+
+.updatedAt {
+    margin-top: 32px;
+    text-align: right;
+    font-size: 14px;
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+    .termsContainer {
+        padding: 28px 22px;
+    }
+
+    .termsContainer h1 {
+        font-size: 26px;
+    }
+
+    .termsSection h2 {
+        font-size: 16.5px;
+        padding: 16px 18px;
+    }
+
+    .termsContent p,
+    .termsContent li {
+        font-size: 14.5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .termsContainer {
+        padding: 22px 18px;
+        border-radius: 12px;
+    }
+
+    .termsContainer h1 {
+        font-size: 22px;
+    }
+}

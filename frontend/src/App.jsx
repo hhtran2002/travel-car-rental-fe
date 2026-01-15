@@ -13,7 +13,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AdminCustomers from "./pages/AdminCustomers";
 import NotFound from "./pages/NotFound";
-
+import Terms from "./pages/Terms";
 // Car pages
 import CarList from "./pages/CarList";
 import CarDetail from "./pages/CarDetail";
@@ -45,6 +45,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/terms" element={<Terms />} />
         <Route path="/bookings/:id" element={<BookingDetail />} />
 
         {/* Driver routes */}
