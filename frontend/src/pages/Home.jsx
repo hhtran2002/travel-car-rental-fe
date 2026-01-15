@@ -47,7 +47,7 @@ export default function Home() {
     };
 
     return (
-        <div className="homePage">
+        <div className="homePage max-w-7xl mx-auto px-4">
             <div className="container">
                 {/* HERO */}
                 <div className="hero">
@@ -101,9 +101,9 @@ export default function Home() {
                                     className="input"
                                     value={pickup}
                                     onChange={(e) => setPickup(e.target.value)}
-                                
+
                                 />
-                            
+
                             </div>
 
                             <div className="vDivider" />
@@ -114,9 +114,9 @@ export default function Home() {
                                     className="input"
                                     value={dropoff}
                                     onChange={(e) => setDropoff(e.target.value)}
-                                    
+
                                 />
-                                
+
                             </div>
 
                             <div className="vDivider" />
@@ -129,7 +129,7 @@ export default function Home() {
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.target.value)}
                                 />
-                                
+
                             </div>
 
                             <div className="vDivider" />
@@ -142,7 +142,7 @@ export default function Home() {
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.target.value)}
                                 />
-                                
+
                             </div>
 
                             <button className="btnSearch" onClick={onSearch} type="button">

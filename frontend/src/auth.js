@@ -22,6 +22,10 @@ export function logout() {
     localStorage.removeItem(ROLE_KEY);
     localStorage.removeItem(USERID_KEY);
     localStorage.removeItem(EMAIL_KEY);
+
+    // ✅ reset theme về light để public page không bị dark đè
+    localStorage.setItem("theme", "light");
+    document.documentElement.classList.remove("dark");
 }
 
 /** Decode JWT payload (chỉ đọc data, không verify signature) */

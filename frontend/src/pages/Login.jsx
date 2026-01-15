@@ -79,6 +79,10 @@ export default function Login() {
                 email: res.data.email,
             });
 
+            // ✅ NOTE (CHANGED): lưu email để Navbar lấy hiển thị email
+            localStorage.setItem("email", res.data.email || emailTrim);
+
+
             // điều hướng theo role (tuỳ bạn)
             const role = String(res.data.role || "").toLowerCase();
             if (role === "admin") nav("/admin/customers");

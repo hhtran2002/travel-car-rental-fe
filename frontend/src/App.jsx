@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
-import Navbar from "./component/Navbar";
-import ProtectedRoute from "./component/ProtectedRoute";
-import Footer from "./component/Footer";
 
+import ProtectedRoute from "./component/ProtectedRoute";
+
+import MainLayout from "./layouts/MainLayout";
 // Pages
 import Home from "./pages/Home";
 import OwnerRegisterGuide from "./pages/OwnerRegisterGuide";
@@ -11,7 +11,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import AdminCustomers from "./pages/AdminCustomers";
 import NotFound from "./pages/NotFound";
 
 // Car pages
@@ -28,29 +27,32 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminCarList from "./pages/admin/AdminCarList";
 import AdminBookingList from "./pages/admin/AdminBookingList";
+import AdminCustomers from "./pages/admin/AdminCustomers";
 
 export default function App() {
   const location = useLocation();
 
   return (
     <>
-      <Navbar />
 
-      <Routes location={location}>
-        {/* Public routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/cars" element={<CarList />} />
-        <Route path="/cars/:id" element={<CarDetail />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+      <Routes>
+        <Route element={<MainLayout />}>
+          {/* Public routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/cars" element={<CarList />} />
+          <Route path="/cars/:id" element={<CarDetail />} />
+          <Route path="/owner/register-guide" element={<OwnerRegisterGuide />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Route>
 
         {/* Driver routes */}
         <Route
           path="/driver"
           element={
-            <ProtectedRoute role="DRIVER">
+            <ProtectedRoute allowRoles={["driver"]}>
               <DriverLayout />
             </ProtectedRoute>
           }
@@ -63,7 +65,7 @@ export default function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute role="ADMIN">
+            <ProtectedRoute allowRoles={["admin"]}>
               <AdminLayout />
             </ProtectedRoute>
           }
@@ -71,15 +73,9 @@ export default function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="cars" element={<AdminCarList />} />
           <Route path="bookings" element={<AdminBookingList />} />
+          <Route path="customers" element={<AdminCustomers />} />
 
-          <Route
-            path="customers"
-            element={
-              <div className="text-gray-500 dark:text-white">
-                Quản lý Khách hàng (Coming Soon)
-              </div>
-            }
-          />
+
 
           <Route
             path="contracts"
@@ -97,7 +93,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      <Footer />
+
     </>
   );
 }
