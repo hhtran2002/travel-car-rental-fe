@@ -1,10 +1,14 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
-import Navbar from "./component/Navbar";
-import ProtectedRoute from "./component/ProtectedRoute";
-import Footer from "./component/Footer";
 
+<<<<<<< HEAD
 // Pages (public)
+=======
+import ProtectedRoute from "./component/ProtectedRoute";
+
+import MainLayout from "./layouts/MainLayout";
+// Pages
+>>>>>>> origin/nhanh-feature-admincustomer_auth
 import Home from "./pages/Home";
 import OwnerRegisterGuide from "./pages/OwnerRegisterGuide";
 import Login from "./pages/Login";
@@ -29,6 +33,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminCarList from "./pages/admin/AdminCarList";
 import AdminBookingList from "./pages/admin/AdminBookingList";
+import AdminCustomers from "./pages/admin/AdminCustomers";
 
 // ================= ACCOUNT (CUSTOMER) =================
 import ProfileTab from "./pages/ProfileTab";
@@ -40,8 +45,8 @@ export default function App() {
 
   return (
     <>
-      <Navbar />
 
+<<<<<<< HEAD
       <Routes location={location}>
         {/* ================= PUBLIC ================= */}
         <Route path="/" element={<Home />} />
@@ -54,6 +59,20 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/terms" element={<Terms />} />
+=======
+      <Routes>
+        <Route element={<MainLayout />}>
+          {/* Public routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/cars" element={<CarList />} />
+          <Route path="/cars/:id" element={<CarDetail />} />
+          <Route path="/owner/register-guide" element={<OwnerRegisterGuide />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Route>
+>>>>>>> origin/nhanh-feature-admincustomer_auth
 
         {/* ================= CUSTOMER ACCOUNT ================= */}
         <Route
@@ -74,7 +93,11 @@ export default function App() {
         <Route
           path="/driver"
           element={
+<<<<<<< HEAD
             // <ProtectedRoute role="DRIVER">
+=======
+            <ProtectedRoute allowRoles={["driver"]}>
+>>>>>>> origin/nhanh-feature-admincustomer_auth
               <DriverLayout />
             // </ProtectedRoute>
           }
@@ -87,7 +110,11 @@ export default function App() {
         <Route
           path="/admin"
           element={
+<<<<<<< HEAD
             // <ProtectedRoute role="ADMIN">
+=======
+            <ProtectedRoute allowRoles={["admin"]}>
+>>>>>>> origin/nhanh-feature-admincustomer_auth
               <AdminLayout />
             // </ProtectedRoute>
           }
@@ -95,15 +122,9 @@ export default function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="cars" element={<AdminCarList />} />
           <Route path="bookings" element={<AdminBookingList />} />
+          <Route path="customers" element={<AdminCustomers />} />
 
-          <Route
-            path="customers"
-            element={
-              <div className="text-gray-500 dark:text-white">
-                Quản lý Khách hàng (Coming Soon)
-              </div>
-            }
-          />
+
 
           <Route
             path="contracts"
@@ -121,7 +142,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      <Footer />
+
     </>
   );
 }

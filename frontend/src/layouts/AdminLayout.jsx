@@ -1,6 +1,7 @@
 // frontend/src/layouts/AdminLayout.jsx
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { logout as doLogout } from "../auth"; // ✅ thêm dòng này
 
 const AdminLayout = () => {
   const location = useLocation();
@@ -21,10 +22,12 @@ const AdminLayout = () => {
 
   // Hàm xử lý đăng xuất giả lập
   const handleLogout = () => {
-    if (window.confirm("Bạn muốn đăng xuất khỏi trang Admin?")) {
-      navigate("/login");
-    }
+    if (!window.confirm("Bạn muốn đăng xuất khỏi trang Admin?")) return;
+
+    doLogout();                 // ✅ auth.js sẽ tự dọn token + theme
+    navigate("/", { replace: true });
   };
+
 
   // Component Menu Item nhỏ gọn
   const MenuItem = ({ to, label, icon }) => {
@@ -33,11 +36,10 @@ const AdminLayout = () => {
       <Link
         to={to}
         className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 mb-1
-        ${
-          isActive
+        ${isActive
             ? "bg-[#00FF00] text-black font-bold shadow-lg shadow-green-500/20"
             : "text-gray-400 hover:bg-gray-800 hover:text-white"
-        }`}
+          }`}
       >
         <span className="text-xl">{icon}</span>
         <span className="font-medium">{label}</span>

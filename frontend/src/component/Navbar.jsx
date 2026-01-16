@@ -10,6 +10,8 @@ export default function Navbar() {
 
     const onLogout = () => {
         logout();
+        localStorage.removeItem("email");
+        localStorage.removeItem("fullName");
         nav("/");
     };
 
@@ -28,8 +30,14 @@ export default function Navbar() {
     };
 
 
+    // ✅ NOTE (CHANGED): lấy tên hiển thị -> ưu tiên fullName, không có thì dùng email
+    const fullName = localStorage.getItem("fullName"); // nếu sau này backend login trả fullName thì bạn set vào đây
+    const email = localStorage.getItem("email");
+    const displayName = fullName || email || "Tài khoản";
+
+
     return (
-        <div className="navbar">
+        <nav className="navbar">
             <div className="nav-left">
                 <Link to="/" className="brand">
                     <span className="brand-badge">C</span>
@@ -67,11 +75,23 @@ export default function Navbar() {
 
 
                 {token && (
+<<<<<<< HEAD
                     <button className="nav-ghost" onClick={onLogout}>
                         Đăng xuất
                     </button>
+=======
+                    <>
+                        <span className="nav-user" style={{ fontWeight: 700 }}>
+                            {displayName}
+                        </span>
+
+                        <button className="nav-ghost" onClick={onLogout}>
+                            Logout
+                        </button>
+                    </>
+>>>>>>> origin/nhanh-feature-admincustomer_auth
                 )}
             </div>
-        </div>
+        </nav>
     );
 }

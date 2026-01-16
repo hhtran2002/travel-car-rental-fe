@@ -9,10 +9,36 @@ export const adminApi = {
     return axiosClient.patch(`/admin/bookings/${id}/confirm`);
   },
 
-  // --- CUSTOMER ---
-  getCustomers: (page = 0, size = 100) => {
-    return axiosClient.get(`/admin/customers?page=${page}&size=${size}`);
+  // --- CUSTOMER LIST (search server-side) ---
+  getCustomers: (page = 0, size = 10, keyword = "") => {
+    const params = new URLSearchParams();
+    params.set("page", page);
+    params.set("size", size);
+    params.set("sort", "userId,desc");
+
+    if (keyword && keyword.trim()) {
+      params.set("keyword", keyword.trim());
+    }
+
+    return axiosClient.get(`/admin/customers?${params.toString()}`);
   },
+
+  // --- CUSTOMER DETAIL ---
+  getCustomerById: (id) => {
+    return axiosClient.get(`/admin/customers/${id}`);
+  },
+
+  // --- CREATE CUSTOMER ---
+  createCustomer: (payload) => {
+    return axiosClient.post("/admin/customers", payload);
+  },
+
+  // ---UPDATE CUSTOMER ---
+  updateCustomer: (id, payload) => {
+    return axiosClient.patch(`/admin/customers/${id}`, payload);
+  },
+
+
 
   // --- CAR (XE) ---
   getAllCars: () => {

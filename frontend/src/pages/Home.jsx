@@ -5,7 +5,7 @@ export default function Home() {
     const navigate = useNavigate();
 
     return (
-        <div className="homePage">
+        <div className="homePage max-w-7xl mx-auto px-4">
             <div className="container">
 
                 {/* HERO */}
@@ -53,6 +53,102 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
+=======
+
+                    {/* SEARCH CARD (đúng DB: pickup/dropoff/start/end) */}
+                    <div className="searchWrap">
+                        <div className="tabs">
+                            <button
+                                className={mode === "self" ? "tab active" : "tab"}
+                                onClick={() => setMode("self")}
+                                type="button"
+                            >
+                                🚗 Xe tự lái
+                            </button>
+                            <button
+                                className={mode === "driver" ? "tab active" : "tab"}
+                                onClick={() => setMode("driver")}
+                                type="button"
+                            >
+                                👨‍✈️ Xe có tài xế
+                            </button>
+                            <button
+                                className={mode === "long" ? "tab active" : "tab"}
+                                onClick={() => setMode("long")}
+                                type="button"
+                            >
+                                🗓️ Thuê dài hạn
+                            </button>
+                        </div>
+
+                        <div className="searchCard">
+                            <div className="field">
+                                <div className="label">📍 Điểm đón</div>
+                                <input
+                                    className="input"
+                                    value={pickup}
+                                    onChange={(e) => setPickup(e.target.value)}
+
+                                />
+
+                            </div>
+
+                            <div className="vDivider" />
+
+                            <div className="field">
+                                <div className="label">📍 Điểm trả</div>
+                                <input
+                                    className="input"
+                                    value={dropoff}
+                                    onChange={(e) => setDropoff(e.target.value)}
+
+                                />
+
+                            </div>
+
+                            <div className="vDivider" />
+
+                            <div className="field">
+                                <div className="label">🗓️ Nhận xe</div>
+                                <input
+                                    className="input"
+                                    type="datetime-local"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                />
+
+                            </div>
+
+                            <div className="vDivider" />
+
+                            <div className="field">
+                                <div className="label">⏱️ Trả xe</div>
+                                <input
+                                    className="input"
+                                    type="datetime-local"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                />
+
+                            </div>
+
+                            <button className="btnSearch" onClick={onSearch} type="button">
+                                Tìm xe
+                            </button>
+                        </div>
+
+                        {mode === "long" && (
+                            <div className="longHint">{longTermHint || "Gợi ý: chọn ngày để xem số ngày thuê."}</div>
+                        )}
+
+                        {mode === "driver" && (
+                            <div className="longHint">
+                                Chế độ <b>Xe có tài xế</b>: khi đặt xe sẽ có <b>driver_id</b> (không null).
+                            </div>
+                        )}
+                    </div>
+>>>>>>> origin/nhanh-feature-admincustomer_auth
                 </div>
 
                 {/* FEATURE */}
