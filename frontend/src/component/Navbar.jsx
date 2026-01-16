@@ -3,76 +3,96 @@ import { getToken, logout } from "../auth";
 import "../style/navbar.css";
 
 export default function Navbar() {
-    const nav = useNavigate();
-    const location = useLocation();             //  lấy cả location
-    const { pathname } = location;
-    const token = getToken();
+  const nav = useNavigate();
+  const location = useLocation();
+  const { pathname } = location;
 
-    const onLogout = () => {
-        logout();
-        nav("/");
-    };
+  const token = getToken();
+  const role = localStorage.getItem("role"); // CUSTOMER | OWNER | DRIVER | ADMIN
 
-    const isAuthPage =
-        pathname.startsWith("/login") ||
-        pathname.startsWith("/register") ||
-        pathname.startsWith("/forgot-password") ||
-        pathname.startsWith("/reset-password");
+  const onLogout = () => {
+    logout();
+    nav("/");
+  };
 
-    const openLoginModal = () => {
-        nav("/login", { state: { backgroundLocation: location } }); // ✅ quan trọng
-    };
+  const isAuthPage =
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/register") ||
+    pathname.startsWith("/forgot-password") ||
+    pathname.startsWith("/reset-password");
 
-    const openRegisterModal = () => {
-        nav("/register", { state: { backgroundLocation: location } });
-    };
+  const openLoginModal = () => {
+    nav("/login", { state: { backgroundLocation: location } });
+  };
 
+  const openRegisterModal = () => {
+    nav("/register", { state: { backgroundLocation: location } });
+  };
 
-    return (
-        <div className="navbar">
-            <div className="nav-left">
-                <Link to="/" className="brand">
-                    <span className="brand-badge">C</span>
-                    Travel Car Rental
-                </Link>
-            </div>
+  // ✅ LOGIC CHÍNH: Trở thành chủ xe
+  const goBecomeOwner = () => {
+    if (!token) {
+      // chưa login → login trước
+      nav("/login", { state: { redirectTo: "/become-owner" } });
+      return;
+    }
 
-            <div className="nav-right">
-                <Link to="/">Giới thiệu</Link>
-                <Link to="/owner/register-guide">Trở thành chủ xe</Link>
+    if (role === "OWNER") {
+      nav("/owner/dashboard");
+      return;
+    }
 
-                <span className="nav-divider" />
+    // CUSTOMER
+    nav("/become-owner");
+  };
 
-                {!token && !isAuthPage && (
-                    <>
-                        <button className="nav-btn" onClick={openRegisterModal}>
-                            Đăng ký
-                        </button>
+  return (
+    <div className="navbar">
+      <div className="nav-left">
+        <Link to="/" className="brand">
+          <span className="brand-badge">C</span>
+          Travel Car Rental
+        </Link>
+      </div>
 
-                        <button className="nav-btn" onClick={openLoginModal}>
-                            Đăng nhập
-                        </button>
-                    </>
-                )}
+      <div className="nav-right">
+        <Link to="/">Giới thiệu</Link>
 
-                {!token && isAuthPage && (
-                    <>
-                        <button className="nav-btn" onClick={() => nav("/register")}>
-                            Đăng ký
-                        </button>
-                        <button className="nav-btn" onClick={() => nav("/login")}>
-                            Đăng nhập
-                        </button>
-                    </>
-                )}
+        {/* ✅ sửa link thành button có logic */}
+        <button className="nav-link-btn" onClick={goBecomeOwner}>
+          Trở thành chủ xe
+        </button>
 
+        <span className="nav-divider" />
 
-                {token && (
-                    <button className="nav-ghost" onClick={onLogout}>
-                        Logout
-                    </button>
-                )}
-            </div>
-        </div>
-    );
+        {!token && !isAuthPage && (
+          <>
+            <button className="nav-btn" onClick={openRegisterModal}>
+              Đăng ký
+            </button>
+            <button className="nav-btn" onClick={openLoginModal}>
+              Đăng nhập
+            </button>
+          </>
+        )}
+
+        {!token && isAuthPage && (
+          <>
+            <button className="nav-btn" onClick={() => nav("/register")}>
+              Đăng ký
+            </button>
+            <button className="nav-btn" onClick={() => nav("/login")}>
+              Đăng nhập
+            </button>
+          </>
+        )}
+
+        {token && (
+          <button className="nav-ghost" onClick={onLogout}>
+            Logout
+          </button>
+        )}
+      </div>
+    </div>
+  );
 }

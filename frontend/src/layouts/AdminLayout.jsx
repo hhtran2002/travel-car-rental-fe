@@ -71,7 +71,9 @@ const AdminLayout = () => {
           <MenuItem to="/admin/bookings" label="Đơn đặt xe" icon="📅" />
           <MenuItem to="/admin/customers" label="Khách hàng" icon="👥" />
           <MenuItem to="/admin/contracts" label="Hợp đồng" icon="📝" />
-
+          <MenuItem to="/admin/kyc" label="Duyệt giấy tờ (KYC)" icon="🪪" />
+          <MenuItem to="/admin/documents" label="Kiểm tra giấy tờ" icon="🪪" />
+          <MenuItem to="/admin/esign" label="Ký số (eSign)" icon="✍️" />
           <div className="text-xs font-bold text-gray-400 uppercase mb-2 pl-2 tracking-wider mt-6">
             Hệ thống
           </div>
@@ -111,7 +113,6 @@ const AdminLayout = () => {
               {theme === "dark" ? "☀️" : "🌙"}
             </button>
 
-            {/* Nút Logout */}
             <button
               onClick={handleLogout}
               className="px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition"

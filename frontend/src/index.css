@@ -5,6 +5,4 @@
 /* Các style custom thêm (nếu cần) */
 body {
   @apply bg-gray-100 text-gray-900 dark:bg-[#121212] dark:text-white transition-colors duration-300;
-  background-color: #121212; /* Đảm bảo nền luôn đen */
-  color: white;
 }
