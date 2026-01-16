@@ -19,10 +19,10 @@ export default function ProtectedRoute({ children, allowRoles = [] }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  const userRoles = getRoles(token);
-
+  const userRoles = getRoles(token).map(r=> String(r).toUpperCase());
+  const allow = allowRoles.map(r=> String(r).toUpperCase());
   if (allowRoles.length) {
-    const ok = allowRoles.some((r) => userRoles.includes(r));
+    const ok = allow.some((r) => userRoles.includes(r));
     if (!ok) {
       return <Navigate to="/403" replace />;
     }

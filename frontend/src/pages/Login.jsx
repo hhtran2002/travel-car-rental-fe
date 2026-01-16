@@ -82,7 +82,7 @@ export default function Login() {
         try {
             setSubmitting(true);
 
-            const res = await api.post("/api/auth/login", {
+            const res = await api.post("/auth/login", {
                 email: emailTrim,
                 password,
             });
@@ -96,9 +96,9 @@ export default function Login() {
             localStorage.setItem("email", res.data.email || emailTrim);
 
             const role = String(res.data.role || "").toLowerCase();
-            if (role === "admin") nav("/admin/customers");
-            else if (role === "driver") nav("/");     // tạm
-            else if (role === "customer") nav("/");   // tạm
+            if (role === "admin") nav("/admin");
+            else if (role === "driver") nav("/driver");     
+            else if (role === "customer") nav("/");   
             else nav("/");
 
         } catch (err) {

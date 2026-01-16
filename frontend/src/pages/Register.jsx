@@ -127,7 +127,7 @@ export default function Register() {
             };
             if (form.phone.trim()) payload.phone = form.phone.trim();
 
-            await api.post("/api/auth/register", payload);
+            await api.post("/auth/register", payload);
 
             if (isModal) {
                 nav("/login", { state: { backgroundLocation: bgLocation }, replace: true });

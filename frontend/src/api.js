@@ -2,11 +2,14 @@ import axios from "axios";
 import { getToken, logout } from "./auth";
 import { normalizeApiError } from "./error";
 
+// export const api = axios.create({
+//     baseURL: "http://localhost:8080",
+//     headers: { "Content-Type": "application/json" },
+// });
 export const api = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "/api",
     headers: { "Content-Type": "application/json" },
 });
-
 api.interceptors.request.use((config) => {
     const token = getToken();
     if (token) config.headers.Authorization = `Bearer ${token}`;
