@@ -1,85 +1,57 @@
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-
-<<<<<<< HEAD
-// Pages (public)
-=======
+/* ========== CORE ========== */
 import ProtectedRoute from "./component/ProtectedRoute";
-
 import MainLayout from "./layouts/MainLayout";
-// Pages
->>>>>>> origin/nhanh-feature-admincustomer_auth
+
+/* ========== PUBLIC PAGES ========== */
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import NotFound from "./pages/NotFound";
 import Terms from "./pages/Terms";
+import NotFound from "./pages/NotFound";
 
-// Car pages
+/* ========== CAR ========== */
 import CarList from "./pages/CarList";
 import CarDetail from "./pages/CarDetail";
 import BookingDetail from "./pages/BookingDetail";
 
-// ================= DRIVER =================
+/* ========== CUSTOMER ========== */
+import CustomerLayout from "./layouts/CustomerLayout";
+import CustomerTrip from "./pages/customers/CustomerTrip";
+import AccountPage from "./pages/AccountPage";
+import ProfileTab from "./pages/ProfileTab";
+import BookingHistoryTab from "./pages/BookingHistoryTab";
+import BecomeOwner from "./pages/customers/BecomeOwner";
+
+/* ========== DRIVER ========== */
 import DriverLayout from "./layouts/DriverLayout";
 import DriverDashboard from "./pages/driver/DriverDashboard";
 import TripHistory from "./pages/driver/TripHistory";
 
-// ================= ADMIN =================
+/* ========== ADMIN ========== */
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminCarList from "./pages/admin/AdminCarList";
 import AdminBookingList from "./pages/admin/AdminBookingList";
-<<<<<<< HEAD
 import AdminCustomers from "./pages/admin/AdminCustomers";
-
-// ================= ACCOUNT (CUSTOMER) =================
-import ProfileTab from "./pages/ProfileTab";
-import BookingHistoryTab from "./pages/BookingHistoryTab";
-import AccountPage from "./pages/AccountPage";
-=======
 import AdminKycRequests from "./pages/admin/AdminKycRequest";
 import AdminKycReview from "./pages/admin/AdminKycReview";
 import AdminDocumentScan from "./pages/admin/AdminDocumentScan";
 import AdminEsignDemo from "./pages/admin/AdminEsignDemo";
 import AdminContractReview from "./pages/admin/AdminContractReview";
 
-// Customer
-import CustomerLayout from "./layouts/CustomerLayout";
-import CustomerTrip from "./pages/customers/CustomerTrip";
-import BecomeOwner from "./pages/customers/BecomeOwner";
-
-// ✅ Owner (MVP)
+/* ========== OWNER ========== */
 import OwnerLayout from "./layouts/OwnerLayout";
 import OwnerDashboard from "./pages/owner/OwnerDashboard";
->>>>>>> origin/minh
 
 export default function App() {
-  const location = useLocation();
-
-  // ✅ Hide Navbar/Footer for app areas (admin/driver/customer/owner)
-  const isAppArea =
-    location.pathname.startsWith("/admin") ||
-    location.pathname.startsWith("/driver") ||
-    location.pathname.startsWith("/customer") ||
-    location.pathname.startsWith("/become-owner") ||
-    location.pathname.startsWith("/owner");
-
   return (
-    <>
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-      <Routes location={location}>
-        {/* ================= PUBLIC ================= */}
-=======
-      {!isAppArea && <Navbar />}
-
-      <Routes>
-        {/* ===== PUBLIC ===== */}
->>>>>>> origin/minh
+    <Routes>
+      {/* ================= PUBLIC ================= */}
+      <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/cars" element={<CarList />} />
         <Route path="/cars/:id" element={<CarDetail />} />
@@ -90,152 +62,97 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/terms" element={<Terms />} />
-=======
-      <Routes>
-        <Route element={<MainLayout />}>
-          {/* Public routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/cars" element={<CarList />} />
-          <Route path="/cars/:id" element={<CarDetail />} />
-          <Route path="/owner/register-guide" element={<OwnerRegisterGuide />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-        </Route>
->>>>>>> origin/nhanh-feature-admincustomer_auth
+      </Route>
 
-<<<<<<< HEAD
-        {/* ================= CUSTOMER ACCOUNT ================= */}
-        <Route
-          path="/account"
-          element={
-            // <ProtectedRoute role="CUSTOMER">
-              <AccountPage />
-            // </ProtectedRoute>
-          }
-        >
-          {/* Mặc định vào profile */}
-          <Route index element={<Navigate to="profile" />} />
-          <Route path="profile" element={<ProfileTab />} />
-          <Route path="bookings" element={<BookingHistoryTab />} />
-        </Route>
+      {/* ================= CUSTOMER ACCOUNT ================= */}
+      <Route
+        path="/account"
+        element={
+          <ProtectedRoute allowRoles={["CUSTOMER"]}>
+            <AccountPage />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="profile" replace />} />
+        <Route path="profile" element={<ProfileTab />} />
+        <Route path="bookings" element={<BookingHistoryTab />} />
+      </Route>
 
-        {/* ================= DRIVER ================= */}
-=======
-        {/* ===== DRIVER ===== */}
->>>>>>> origin/minh
-        <Route
-          path="/driver"
-          element={
-<<<<<<< HEAD
-            // <ProtectedRoute role="DRIVER">
-=======
-            <ProtectedRoute allowRoles={["driver"]}>
->>>>>>> origin/nhanh-feature-admincustomer_auth
-              <DriverLayout />
-            // </ProtectedRoute>
-          }
-        >
-          <Route index element={<DriverDashboard />} />
-          <Route path="history" element={<TripHistory />} />
-          <Route path="*" element={<Navigate to="/driver" replace />} />
-        </Route>
+      {/* ================= CUSTOMER ================= */}
+      <Route
+        path="/customer"
+        element={
+          <ProtectedRoute allowRoles={["CUSTOMER"]}>
+            <CustomerLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="trip" replace />} />
+        <Route path="trip" element={<CustomerTrip />} />
+        <Route path="*" element={<Navigate to="/customer/trip" replace />} />
+      </Route>
 
-<<<<<<< HEAD
-        {/* ================= ADMIN ================= */}
-=======
-        {/* ===== ADMIN ===== */}
->>>>>>> origin/minh
-        <Route
-          path="/admin"
-          element={
-<<<<<<< HEAD
-            // <ProtectedRoute role="ADMIN">
-=======
-            <ProtectedRoute allowRoles={["admin"]}>
->>>>>>> origin/nhanh-feature-admincustomer_auth
-              <AdminLayout />
-            // </ProtectedRoute>
-          }
-        >
-          <Route index element={<AdminDashboard />} />
-          <Route path="cars" element={<AdminCarList />} />
-          <Route path="bookings" element={<AdminBookingList />} />
-<<<<<<< HEAD
-          <Route path="customers" element={<AdminCustomers />} />
+      {/* ================= BECOME OWNER ================= */}
+      <Route
+        path="/become-owner"
+        element={
+          <ProtectedRoute allowRoles={["CUSTOMER", "OWNER"]}>
+            <BecomeOwner />
+          </ProtectedRoute>
+        }
+      />
 
+      {/* ================= DRIVER ================= */}
+      <Route
+        path="/driver"
+        element={
+          <ProtectedRoute allowRoles={["DRIVER"]}>
+            <DriverLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DriverDashboard />} />
+        <Route path="history" element={<TripHistory />} />
+        <Route path="*" element={<Navigate to="/driver" replace />} />
+      </Route>
 
-=======
-          <Route path="kyc" element={<AdminKycRequests />} />
-          <Route path="kyc/:id" element={<AdminKycReview />} />
-          <Route path="documents" element={<AdminDocumentScan />} />
-          <Route path="esign" element={<AdminEsignDemo />} />
+      {/* ================= ADMIN ================= */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowRoles={["ADMIN"]}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="cars" element={<AdminCarList />} />
+        <Route path="bookings" element={<AdminBookingList />} />
+        <Route path="customers" element={<AdminCustomers />} />
+        <Route path="kyc" element={<AdminKycRequests />} />
+        <Route path="kyc/:id" element={<AdminKycReview />} />
+        <Route path="documents" element={<AdminDocumentScan />} />
+        <Route path="esign" element={<AdminEsignDemo />} />
+        <Route path="contracts" element={<AdminContractReview />} />
+        <Route path="*" element={<Navigate to="/admin" replace />} />
+      </Route>
 
-          <Route
-            path="customers"
-            element={<div className="text-gray-500">Coming Soon</div>}
-          />
-          <Route path="contracts" element={<AdminContractReview />} />
->>>>>>> origin/minh
+      {/* ================= OWNER ================= */}
+      <Route
+        path="/owner"
+        element={
+          <ProtectedRoute allowRoles={["OWNER"]}>
+            <OwnerLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="dashboard" replace />} />
+        <Route path="dashboard" element={<OwnerDashboard />} />
+        <Route path="*" element={<Navigate to="/owner/dashboard" replace />} />
+      </Route>
 
-          <Route path="*" element={<Navigate to="/admin" replace />} />
-        </Route>
-
-<<<<<<< HEAD
-        {/* ================= 404 ================= */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-
-
-=======
-        {/* ===== CUSTOMER ===== */}
-        <Route
-          path="/become-owner"
-          element={
-            <ProtectedRoute role={["CUSTOMER", "OWNER"]}>
-              <BecomeOwner />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* ===== CUSTOMER ===== */}
-        <Route
-          path="/customer"
-          element={
-            <ProtectedRoute role="CUSTOMER">
-              <CustomerLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Navigate to="/customer/trip" replace />} />
-          <Route path="trip" element={<CustomerTrip />} />
-          <Route path="*" element={<Navigate to="/customer/trip" replace />} />
-        </Route>
-
-        {/* ===== OWNER ===== */}
-        <Route
-          path="/owner"
-          element={
-            <ProtectedRoute role="OWNER">
-              <OwnerLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Navigate to="/owner/dashboard" replace />} />
-          <Route path="dashboard" element={<OwnerDashboard />} />
-          <Route
-            path="*"
-            element={<Navigate to="/owner/dashboard" replace />}
-          />
-        </Route>
-
-        {/* ===== 404 ===== */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-
-      {!isAppArea && <Footer />}
->>>>>>> origin/minh
-    </>
+      {/* ================= 404 ================= */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }

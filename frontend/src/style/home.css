@@ -3,7 +3,6 @@
    ========================= */
 
 .homePage {
-<<<<<<< HEAD
     width: 100%;
     min-height: 100vh;
     background: #ffffff;
@@ -22,11 +21,6 @@
 /* =========================
    HERO SECTION
    ========================= */
-=======
-  padding: 88px 0 60px;
-}
-
->>>>>>> origin/nhanh-feature-admincustomer_auth
 
 .hero {
     position: relative;
