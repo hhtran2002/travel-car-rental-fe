@@ -1,0 +1,26 @@
+.booking-list {
+  display: grid;
+  gap: 16px;
+  max-width: 800px;
+}
+
+.booking-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 6px solid #22c55e;
+}
+
+.booking-meta {
+  color: #6b7280;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.status {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #14532d;
+}

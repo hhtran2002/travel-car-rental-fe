@@ -1,6 +1,6 @@
 .tcrFooter {
     background: #fff;
-    border-top: 1px solid #e5e7eb;
+    border-top: 5px solid #e5e7eb;
 }
 
 /* reset riêng cho footer để KHÔNG bị bullet/gạch chân */
@@ -20,7 +20,7 @@
 }
 
 .tcrFooter__inner {
-    padding: 44px 0 18px;
+    padding: 60px 0 24px;
 }
 
 .tcrFooter__grid {

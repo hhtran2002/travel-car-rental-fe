@@ -6,7 +6,7 @@ import "../style/login.css";     // ✅ dùng overlay modal giống Login
 import "../style/register.css";
 import bg from "../assets/xe.jpg";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const PHONE_RE = /^0\d{9,10}$/;
 
 export default function Register() {
@@ -80,19 +80,39 @@ export default function Register() {
         return Object.values(e).every((x) => !x);
     };
 
-    const mapBackendMessageToField = (msg) => {
-        if (msg === "Email không được trống") return { field: "email", msg };
-        if (msg === "Mật khẩu không được trống") return { field: "password", msg };
+    // ✅ NOTE (CHANGED): map lỗi backend “mềm” theo status + includes (bền hơn ===)
+    const mapBackendMessageToField = (msg = "", status) => {
+        const m = String(msg || "").toLowerCase().trim();
 
-        if (msg === "Họ tên không được trống") return { field: "fullName", msg };
-        if (msg === "Email không hợp lệ") return { field: "email", msg };
-        if (msg === "Mật khẩu tối thiểu 6 ký tự") return { field: "password", msg };
-        if (msg === "Email đã tồn tại") return { field: "email", msg };
-        if (msg === "Số điện thoại đã tồn tại") return { field: "phone", msg };
-        if (msg === "Body không hợp lệ hoặc đang để trống") return { field: "form", msg };
+        // ✅ bắt lỗi trùng dữ liệu dù status/message kiểu gì
+        const isDuplicate =
+            status === 409 ||
+            m.includes("tồn tại") ||
+            m.includes("exists") ||
+            m.includes("duplicate");
+
+        if (isDuplicate) {
+            if (m.includes("email")) return { field: "email", msg };
+            if (m.includes("số điện thoại") || m.includes("so dien thoai") || m.includes("phone"))
+                return { field: "phone", msg };
+            return { field: "form", msg };
+        }
+
+        // validate
+        if (m.includes("họ tên") || m.includes("ho ten") || m.includes("fullname"))
+            return { field: "fullName", msg };
+
+        if (m.includes("email")) return { field: "email", msg };
+
+        if (m.includes("mật khẩu") || m.includes("mat khau") || m.includes("password"))
+            return { field: "password", msg };
+
+        if (m.includes("body")) return { field: "form", msg };
 
         return { field: "form", msg: msg || "Có lỗi xảy ra" };
     };
+
+
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -102,7 +122,7 @@ export default function Register() {
         try {
             const payload = {
                 fullName: form.fullName.trim(),
-                email: form.email.trim(),
+                email: form.email.trim().toLowerCase(),
                 password: form.password,
             };
             if (form.phone.trim()) payload.phone = form.phone.trim();
@@ -115,10 +135,34 @@ export default function Register() {
                 nav("/login", { replace: true });
             }
         } catch (err) {
-            const msg = err?.response?.data?.message || "Có lỗi xảy ra";
-            const mapped = mapBackendMessageToField(msg);
+            // ✅ ưu tiên err.status/err.data vì interceptor đã normalize
+            const status = err?.status ?? err?.response?.status;
+            const data = err?.data ?? err?.response?.data;
+
+            const fieldBag =
+                (data?.errors && typeof data.errors === "object" && data.errors) ||
+                (data?.fieldErrors && typeof data.fieldErrors === "object" && data.fieldErrors);
+
+            if (fieldBag) {
+                setErrors((p) => ({ ...p, ...fieldBag, form: "" }));
+                return;
+            }
+
+
+            const msg =
+                err?.message ||                 // ✅ message từ normalizeApiError
+                data?.message ||
+                data?.msg ||
+                data?.detail ||
+                data?.errorMessage ||
+                "";
+
+            const finalMsg = msg || (status === 409 ? "Dữ liệu đã tồn tại" : "Có lỗi xảy ra");
+
+            const mapped = mapBackendMessageToField(finalMsg, status);
             setErrors((p) => ({ ...p, [mapped.field]: mapped.msg }));
-        } finally {
+        }
+        finally {
             setLoading(false);
         }
     };
@@ -184,12 +228,13 @@ export default function Register() {
                         onChange={(ev) => setField("phone", ev.target.value)}
                         placeholder="Ví dụ: 0912356789"
                         autoComplete="tel"
+                        inputMode="numeric" // ✅ NOTE (optional): mobile hiện bàn phím số
                     />
                     {errors.phone ? <div className="mioto-error">{errors.phone}</div> : null}
                 </div>
 
                 <div className="mioto-field">
-                    <label>Tên hiển thị</label>
+                    <label>Họ và tên</label>
                     <input
                         className="mioto-input"
                         value={form.fullName}
@@ -283,8 +328,7 @@ export default function Register() {
                         {errors.agree ? <div className="mioto-error">{errors.agree}</div> : null}
                     </div>
                 </div>
-
-                <button className="mioto-btn" disabled={loading || !canSubmit} type="submit">
+                <button className="mioto-btn" disabled={loading} type="submit">
                     {loading ? "Đang đăng ký..." : "Đăng ký"}
                 </button>
 

@@ -1,0 +1,121 @@
+/* Nền tổng */
+.booking-detail-wrapper {
+  min-height: 100vh;
+  background: #f4fdf7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Card hợp đồng */
+.booking-detail {
+  background: #ffffff;
+  width: 100%;
+  max-width: 650px;
+  padding: 30px 40px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-top: 6px solid #2ecc71;
+}
+
+/* Tiêu đề */
+.title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+/* Box nội dung */
+.contract-box {
+  border: 1px solid #e0f2e9;
+  border-radius: 10px;
+  padding: 20px;
+  background: #fafefe;
+}
+
+/* Dòng thông tin */
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px dashed #e0e0e0;
+  font-size: 15px;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row span {
+  color: #555;
+}
+
+.row strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* Trạng thái */
+.row.status strong {
+  color: #27ae60;
+  text-transform: uppercase;
+}
+
+/* Tổng tiền */
+.row.total {
+  margin-top: 15px;
+  padding-top: 18px;
+  border-top: 2px solid #2ecc71;
+  font-size: 18px;
+}
+
+.row.total strong {
+  color: #27ae60;
+  font-size: 20px;
+}
+
+/* Button */
+.back-btn {
+  margin-top: 30px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2ecc71;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.back-btn:hover {
+  background: #27ae60;
+  transform: translateY(-2px);
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+
+.row.payment.unpaid strong {
+  color: #d32f2f;
+}
+
+.row.payment.partial strong {
+  color: #f9a825;
+}
+
+.row.payment.paid strong {
+  color: #2e7d32;
+}
+
+.row.paid strong {
+  color: #2e7d32;
+}

@@ -26,6 +26,8 @@ function GoogleIcon() {
     );
 }
 
+const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
 export default function Login() {
     const nav = useNavigate();
     const location = useLocation();
@@ -53,13 +55,25 @@ export default function Login() {
 
     const validate = () => {
         const next = { email: "", password: "" };
-        if (!emailTrim) next.email = "Email không được để trống";
-        if (!password) next.password = "Mật khẩu không được để trống";
+
+        const e = emailTrim;
+        const pw = password;
+
+        // ===== EMAIL (giống Postman) =====
+        if (!e) next.email = "Email không được trống";
+        else if (!e.includes("@")) next.email = "Email không hợp lệ";
+        else if (!EMAIL_RE.test(e)) next.email = "Email không đúng định dạng";
+
+        // ===== PASSWORD (giống Postman) =====
+        if (!pw || pw.trim() === "") next.password = "Mật khẩu không được trống";
+        else if (pw.length < 6) next.password = "Mật khẩu tối thiểu 6 ký tự";
+
         setFieldErr(next);
         return !next.email && !next.password;
     };
 
     const submit = async (e) => {
+
         e.preventDefault();
         setApiErr("");
 
@@ -79,7 +93,8 @@ export default function Login() {
                 email: res.data.email,
             });
 
-            // điều hướng theo role (tuỳ bạn)
+            localStorage.setItem("email", res.data.email || emailTrim);
+
             const role = String(res.data.role || "").toLowerCase();
             if (role === "admin") nav("/admin/customers");
             else if (role === "driver") nav("/");     // tạm
@@ -87,12 +102,37 @@ export default function Login() {
             else nav("/");
 
         } catch (err) {
-            const msg = err?.response?.data?.message || "Đăng nhập thất bại";
-            setApiErr(msg);
+            const status = err?.status ?? err?.response?.status;
+            const msg =
+                err?.message ||
+                err?.data?.message ||
+                err?.response?.data?.message ||
+                "Đăng nhập thất bại";
+
+
+            // ✅ 400: đưa message về đúng ô input (giống Postman)
+            if (status === 400) {
+                const next = { email: "", password: "" };
+
+                const m = String(msg || "");
+                if (m.toLowerCase().includes("email")) next.email = m;
+                else if (m.toLowerCase().includes("mật khẩu")) next.password = m;
+                else setApiErr(m);
+
+
+                setFieldErr((p) => ({ ...p, ...next }));
+                return;
+            }
+
+            // ✅ 401 / 403: hiện banner đúng message (Sai email hoặc mật khẩu / Tài khoản đã bị khóa)
+            setFieldErr({ email: "", password: "" });
+            setApiErr(String(msg || "Đăng nhập thất bại"));
+    
         } finally {
             setSubmitting(false);
         }
     };
+
 
     const close = () => {
         if (isModal) {
