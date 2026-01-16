@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 // import { driverApi } from "../../api/driverApi"; // bật khi nối backend thật
 import TripMap from "../../component/TripMap";
 
+import { driverApi } from "../../api/driverApi";
+
 // ====== State machine ======
 const TRIP_STATUS = {
   ASSIGNED: "ASSIGNED",
@@ -24,51 +26,6 @@ const canTransition = (from, to) => (TRANSITIONS[from] || []).includes(to);
 
 // ====== Mock API (đổi sang driverApi khi nối BE) ======
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-const mockDriverApi = {
-  async getMyTrips() {
-    await sleep(600);
-
-    // Mock data có toạ độ (như bạn đang làm)
-    return [
-      {
-        id: 1,
-        customerName: "Nguyễn Văn A",
-        customerPhone: "0909 111 222",
-        route: "Sân Bay TSN → Bitexco Q.1",
-        pickupTime: "2026-01-15 15:20",
-        status: TRIP_STATUS.CONFIRMED, // để có nút BẮT ĐẦU
-        price: 2500000,
-        startPoint: [10.818463, 106.658825],
-        endPoint: [10.771595, 106.704758],
-      },
-      {
-        id: 2,
-        customerName: "Trần Thị B",
-        customerPhone: "0902 333 444",
-        route: "Quận 7 → Landmark 81",
-        pickupTime: "2026-01-15 16:10",
-        status: TRIP_STATUS.ASSIGNED,
-        price: 500000,
-        startPoint: [10.7328, 106.721],
-        endPoint: [10.795, 106.722],
-      },
-    ];
-  },
-
-  async updateTripStatus(bookingId, status) {
-    await sleep(700);
-
-    // Giả lập lỗi ngẫu nhiên (để test UI error)
-    if (Math.random() < 0.12) {
-      const err = new Error("Network error");
-      err.code = "NETWORK";
-      throw err;
-    }
-
-    return { ok: true, id: bookingId, status };
-  },
-};
 
 const formatVND = (n) =>
   new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
@@ -159,9 +116,7 @@ const ActionButton = ({
 };
 
 export default function DriverDashboard() {
-  const USE_MOCK = true;
-
-  const api = USE_MOCK ? mockDriverApi : null; // đổi sang driverApi khi nối BE
+  // đổi sang driverApi khi nối BE
 
   const [trips, setTrips] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
@@ -175,14 +130,75 @@ export default function DriverDashboard() {
     setPageLoading(true);
     setPageError("");
     try {
-      // const data = await driverApi.getMyTrips();
-      const data = await api.getMyTrips();
-      setTrips(Array.isArray(data) ? data : []);
+      const data = await driverApi.getMyTrips();
+
+      // normalize nếu BE trả khác key
+      const normalized = (Array.isArray(data) ? data : data?.data ?? []).map(
+        (t) => ({
+          id: t.id ?? t.tripId ?? t.bookingId,
+          customerName: t.customerName ?? t.customer?.fullName ?? "—",
+          customerPhone: t.customerPhone ?? t.customer?.phone ?? "—",
+          route:
+            t.route ??
+            `${t.pickupAddress ?? ""} → ${t.dropoffAddress ?? ""}`.trim(),
+          pickupTime: t.pickupTime ?? t.startTime ?? t.createdAt ?? "",
+          status: t.status,
+          price: t.price ?? t.totalPrice ?? 0,
+          startPoint:
+            t.startPoint ??
+            (t.pickupLat != null && t.pickupLng != null
+              ? [t.pickupLat, t.pickupLng]
+              : null),
+          endPoint:
+            t.endPoint ??
+            (t.dropoffLat != null && t.dropoffLng != null
+              ? [t.dropoffLat, t.dropoffLng]
+              : null),
+        })
+      );
+
+      setTrips(normalized);
     } catch (e) {
       setTrips([]);
-      setPageError("Không tải được danh sách chuyến. Vui lòng thử lại.");
+      setPageError(
+        e?.response?.data?.message ||
+          "Không tải được danh sách chuyến. Kiểm tra BE/CORS/token."
+      );
     } finally {
       setPageLoading(false);
+    }
+  };
+
+  const doUpdateStatus = async (trip, nextStatus) => {
+    const { id, status: currentStatus } = trip;
+
+    if (!canTransition(currentStatus, nextStatus)) {
+      setTripActionError(
+        id,
+        `Không thể chuyển từ ${currentStatus} → ${nextStatus}.`
+      );
+      return;
+    }
+
+    setTripActionError(id, "");
+    setTripActionLoading(id, true);
+
+    // optimistic UI
+    const prevTrips = trips;
+    setTrips((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, status: nextStatus } : t))
+    );
+
+    try {
+      await driverApi.updateTripStatus(id, nextStatus);
+    } catch (e) {
+      setTrips(prevTrips);
+      setTripActionError(
+        id,
+        e?.response?.data?.message || "Có lỗi khi cập nhật trạng thái."
+      );
+    } finally {
+      setTripActionLoading(id, false);
     }
   };
 
@@ -204,46 +220,6 @@ export default function DriverDashboard() {
     setActionLoadingById((prev) => ({ ...prev, [id]: v }));
   const setTripActionError = (id, msg) =>
     setActionErrorById((prev) => ({ ...prev, [id]: msg }));
-
-  const doUpdateStatus = async (trip, nextStatus) => {
-    const { id, status: currentStatus } = trip;
-
-    // chặn sai state
-    if (!canTransition(currentStatus, nextStatus)) {
-      setTripActionError(
-        id,
-        `Không thể chuyển từ ${currentStatus} → ${nextStatus}.`
-      );
-      return;
-    }
-
-    // clear lỗi cũ
-    setTripActionError(id, "");
-
-    // optimistic UI (MVP): update ngay, nếu fail thì rollback
-    setTripActionLoading(id, true);
-    const prevTrips = trips;
-
-    setTrips((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, status: nextStatus } : t))
-    );
-
-    try {
-      // await driverApi.updateTripStatus(id, nextStatus);
-      await api.updateTripStatus(id, nextStatus);
-    } catch (e) {
-      // rollback
-      setTrips(prevTrips);
-      setTripActionError(
-        id,
-        e?.code === "NETWORK"
-          ? "Mạng lỗi — vui lòng thử lại."
-          : "Có lỗi khi cập nhật trạng thái."
-      );
-    } finally {
-      setTripActionLoading(id, false);
-    }
-  };
 
   const TripCard = ({ trip, actions }) => {
     const loading = !!actionLoadingById[trip.id];

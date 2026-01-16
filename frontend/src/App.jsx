@@ -37,14 +37,13 @@ import CustomerLayout from "./layouts/CustomerLayout";
 import CustomerTrip from "./pages/customers/CustomerTrip";
 import BecomeOwner from "./pages/customers/BecomeOwner";
 
-// ✅ Owner (MVP)
+// Owner
 import OwnerLayout from "./layouts/OwnerLayout";
 import OwnerDashboard from "./pages/owner/OwnerDashboard";
 
 export default function App() {
   const location = useLocation();
 
-  // ✅ Hide Navbar/Footer for app areas (admin/driver/customer/owner)
   const isAppArea =
     location.pathname.startsWith("/admin") ||
     location.pathname.startsWith("/driver") ||
@@ -57,7 +56,7 @@ export default function App() {
       {!isAppArea && <Navbar />}
 
       <Routes>
-        {/* ===== PUBLIC ===== */}
+        {/* PUBLIC */}
         <Route path="/" element={<Home />} />
         <Route path="/cars" element={<CarList />} />
         <Route path="/cars/:id" element={<CarDetail />} />
@@ -66,7 +65,7 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* ===== DRIVER ===== */}
+        {/* DRIVER */}
         <Route
           path="/driver"
           element={
@@ -80,7 +79,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/driver" replace />} />
         </Route>
 
-        {/* ===== ADMIN ===== */}
+        {/* ADMIN */}
         <Route
           path="/admin"
           element={
@@ -96,17 +95,11 @@ export default function App() {
           <Route path="kyc/:id" element={<AdminKycReview />} />
           <Route path="documents" element={<AdminDocumentScan />} />
           <Route path="esign" element={<AdminEsignDemo />} />
-
-          <Route
-            path="customers"
-            element={<div className="text-gray-500">Coming Soon</div>}
-          />
           <Route path="contracts" element={<AdminContractReview />} />
-
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
 
-        {/* ===== CUSTOMER ===== */}
+        {/* BECOME OWNER (tách riêng để tắt footer/navbar) */}
         <Route
           path="/become-owner"
           element={
@@ -116,7 +109,7 @@ export default function App() {
           }
         />
 
-        {/* ===== CUSTOMER ===== */}
+        {/* CUSTOMER */}
         <Route
           path="/customer"
           element={
@@ -130,7 +123,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/customer/trip" replace />} />
         </Route>
 
-        {/* ===== OWNER ===== */}
+        {/* OWNER */}
         <Route
           path="/owner"
           element={
@@ -147,7 +140,7 @@ export default function App() {
           />
         </Route>
 
-        {/* ===== 404 ===== */}
+        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
 

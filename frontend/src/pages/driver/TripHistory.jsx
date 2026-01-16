@@ -13,7 +13,8 @@ const TripHistory = () => {
         setLoading(true);
         setErr("");
 
-        const res = await driverApi.getMyTrips();
+        const res = await driverApi.getHistory();
+
         const arr = Array.isArray(res) ? res : res?.data ?? [];
 
         // Nếu BE trả field khác, map lại cho đúng UI
