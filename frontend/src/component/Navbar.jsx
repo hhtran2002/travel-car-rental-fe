@@ -55,7 +55,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* ========== RIGHT ========== */}
+      {/* ========== RIGHT ========= */}
       <div className="nav-right">
         <Link to="/">Giới thiệu</Link>
 
