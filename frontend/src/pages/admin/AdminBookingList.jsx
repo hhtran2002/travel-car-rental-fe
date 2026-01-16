@@ -8,7 +8,7 @@ const AdminBookingList = () => {
   const fetchBookings = async () => {
     try {
       const data = await adminApi.getAllBookings();
-      // Sắp xếp ID giảm dần (đơn mới nhất lên đầu)
+
       const sortedData = [...data].sort((a, b) => b.id - a.id);
       setBookings(sortedData);
     } catch (error) {
@@ -30,7 +30,7 @@ const AdminBookingList = () => {
     try {
       await adminApi.confirmBooking(id);
       alert("Đã duyệt đơn thành công!");
-      fetchBookings(); // Reload lại bảng
+      fetchBookings();
     } catch (error) {
       alert(
         "Lỗi duyệt đơn: " +

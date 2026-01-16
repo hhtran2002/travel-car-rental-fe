@@ -10,7 +10,6 @@ import MainLayout from "./layouts/MainLayout";
 // Pages
 >>>>>>> origin/nhanh-feature-admincustomer_auth
 import Home from "./pages/Home";
-import OwnerRegisterGuide from "./pages/OwnerRegisterGuide";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -33,22 +32,54 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminCarList from "./pages/admin/AdminCarList";
 import AdminBookingList from "./pages/admin/AdminBookingList";
+<<<<<<< HEAD
 import AdminCustomers from "./pages/admin/AdminCustomers";
 
 // ================= ACCOUNT (CUSTOMER) =================
 import ProfileTab from "./pages/ProfileTab";
 import BookingHistoryTab from "./pages/BookingHistoryTab";
 import AccountPage from "./pages/AccountPage";
+=======
+import AdminKycRequests from "./pages/admin/AdminKycRequest";
+import AdminKycReview from "./pages/admin/AdminKycReview";
+import AdminDocumentScan from "./pages/admin/AdminDocumentScan";
+import AdminEsignDemo from "./pages/admin/AdminEsignDemo";
+import AdminContractReview from "./pages/admin/AdminContractReview";
+
+// Customer
+import CustomerLayout from "./layouts/CustomerLayout";
+import CustomerTrip from "./pages/customers/CustomerTrip";
+import BecomeOwner from "./pages/customers/BecomeOwner";
+
+// ✅ Owner (MVP)
+import OwnerLayout from "./layouts/OwnerLayout";
+import OwnerDashboard from "./pages/owner/OwnerDashboard";
+>>>>>>> origin/minh
 
 export default function App() {
   const location = useLocation();
 
+  // ✅ Hide Navbar/Footer for app areas (admin/driver/customer/owner)
+  const isAppArea =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/driver") ||
+    location.pathname.startsWith("/customer") ||
+    location.pathname.startsWith("/become-owner") ||
+    location.pathname.startsWith("/owner");
+
   return (
     <>
+<<<<<<< HEAD
 
 <<<<<<< HEAD
       <Routes location={location}>
         {/* ================= PUBLIC ================= */}
+=======
+      {!isAppArea && <Navbar />}
+
+      <Routes>
+        {/* ===== PUBLIC ===== */}
+>>>>>>> origin/minh
         <Route path="/" element={<Home />} />
         <Route path="/cars" element={<CarList />} />
         <Route path="/cars/:id" element={<CarDetail />} />
@@ -74,6 +105,7 @@ export default function App() {
         </Route>
 >>>>>>> origin/nhanh-feature-admincustomer_auth
 
+<<<<<<< HEAD
         {/* ================= CUSTOMER ACCOUNT ================= */}
         <Route
           path="/account"
@@ -90,6 +122,9 @@ export default function App() {
         </Route>
 
         {/* ================= DRIVER ================= */}
+=======
+        {/* ===== DRIVER ===== */}
+>>>>>>> origin/minh
         <Route
           path="/driver"
           element={
@@ -104,9 +139,14 @@ export default function App() {
         >
           <Route index element={<DriverDashboard />} />
           <Route path="history" element={<TripHistory />} />
+          <Route path="*" element={<Navigate to="/driver" replace />} />
         </Route>
 
+<<<<<<< HEAD
         {/* ================= ADMIN ================= */}
+=======
+        {/* ===== ADMIN ===== */}
+>>>>>>> origin/minh
         <Route
           path="/admin"
           element={
@@ -122,27 +162,80 @@ export default function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="cars" element={<AdminCarList />} />
           <Route path="bookings" element={<AdminBookingList />} />
+<<<<<<< HEAD
           <Route path="customers" element={<AdminCustomers />} />
 
 
+=======
+          <Route path="kyc" element={<AdminKycRequests />} />
+          <Route path="kyc/:id" element={<AdminKycReview />} />
+          <Route path="documents" element={<AdminDocumentScan />} />
+          <Route path="esign" element={<AdminEsignDemo />} />
 
           <Route
-            path="contracts"
-            element={
-              <div className="text-gray-500 dark:text-white">
-                Quản lý Hợp đồng (Coming Soon)
-              </div>
-            }
+            path="customers"
+            element={<div className="text-gray-500">Coming Soon</div>}
           />
+          <Route path="contracts" element={<AdminContractReview />} />
+>>>>>>> origin/minh
 
-          <Route path="*" element={<Navigate to="/admin" />} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
 
+<<<<<<< HEAD
         {/* ================= 404 ================= */}
         <Route path="*" element={<NotFound />} />
       </Routes>
 
 
+=======
+        {/* ===== CUSTOMER ===== */}
+        <Route
+          path="/become-owner"
+          element={
+            <ProtectedRoute role={["CUSTOMER", "OWNER"]}>
+              <BecomeOwner />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ===== CUSTOMER ===== */}
+        <Route
+          path="/customer"
+          element={
+            <ProtectedRoute role="CUSTOMER">
+              <CustomerLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Navigate to="/customer/trip" replace />} />
+          <Route path="trip" element={<CustomerTrip />} />
+          <Route path="*" element={<Navigate to="/customer/trip" replace />} />
+        </Route>
+
+        {/* ===== OWNER ===== */}
+        <Route
+          path="/owner"
+          element={
+            <ProtectedRoute role="OWNER">
+              <OwnerLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Navigate to="/owner/dashboard" replace />} />
+          <Route path="dashboard" element={<OwnerDashboard />} />
+          <Route
+            path="*"
+            element={<Navigate to="/owner/dashboard" replace />}
+          />
+        </Route>
+
+        {/* ===== 404 ===== */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
+      {!isAppArea && <Footer />}
+>>>>>>> origin/minh
     </>
   );
 }
