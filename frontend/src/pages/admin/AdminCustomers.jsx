@@ -65,10 +65,19 @@ function formatVNDate(iso) {
     return `${d}/${m}/${y}`;
 }
 
+function normalizeGenderValue(g) {
+    const s = String(g || "").trim().toLowerCase();
+    if (s === "nam") return "male";
+    if (s === "nữ" || s === "nu") return "female";
+    if (s === "male" || s === "female") return s;
+    return "";
+}
+
+
 function formatGender(g) {
-    const s = String(g || "").toLowerCase();
-    if (s === "male" || s === "nam") return "Nam";
-    if (s === "female" || s === "nữ" || s === "nu") return "Nữ";
+    const s = normalizeGenderValue(g);
+    if (s === "male") return "Nam";
+    if (s === "female") return "Nữ";
     return "-";
 }
 
@@ -124,34 +133,27 @@ function validatePatch(original, form) {
     const oDob = (original?.dob ?? "");
     const fDob = form.dob;
 
-    // dob: chỉ gửi nếu khác và không rỗng
+    // dob: chỉ gửi nếu khác và có giá trị hợp lệ
     if (fDob !== oDob) {
-        if (!fDob) {
-            // backend hiện không hỗ trợ clear dob -> coi như không cho xóa
-            return { ok: false, msg: "Ngày sinh không thể để trống (hiện chưa hỗ trợ xoá dob)" };
+        if (fDob) {
+            const d = new Date(fDob);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (!(d < today)) return { ok: false, msg: "Ngày sinh phải là ngày trong quá khứ" };
+            changes.dob = fDob;
         }
-        const d = new Date(fDob);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (!(d < today)) return { ok: false, msg: "Ngày sinh phải là ngày trong quá khứ" };
-        changes.dob = fDob;
+        // nếu fDob rỗng => coi như không sửa dob, không add changes.dob
     }
 
-    const oGender = (original?.gender ?? "");
-    const fGender = form.gender;
+
+    const oGender = normalizeGenderValue(original?.gender);
+    const fGender = normalizeGenderValue(form.gender);
 
     if (fGender !== oGender) {
-        // cho phép "" để clear
-        const v = String(fGender ?? "").trim();
-        if (v === "") changes.gender = ""; // backend sẽ set null
-        else {
-            const g = v.toLowerCase();
-            const ok = ["nam", "nữ", "nu", "male", "female"].includes(g);
-            if (!ok) return { ok: false, msg: "Giới tính chỉ nhận 'nam' hoặc 'nữ' (hoặc male/female)" };
-            // giữ đúng backend mong muốn: "nam"/"nữ"/"male"/"female"
-            changes.gender = g === "nu" ? "nữ" : g;
-        }
+        // cho phép bỏ chọn -> gửi null
+        changes.gender = fGender ? fGender : null;
     }
+
 
     const oAvatar = (original?.avatar ?? "");
     const fAvatar = form.avatar;
@@ -375,7 +377,7 @@ export default function AdminCustomers() {
                 fullName: res?.fullName ?? "",
                 phone: res?.phone ?? "",
                 dob: res?.dob ?? "",
-                gender: res?.gender ?? "",
+                gender: normalizeGenderValue(res?.gender),
                 avatar: res?.avatar ?? "",
                 status: res?.status ?? "", // active/locked
             });
@@ -425,7 +427,7 @@ export default function AdminCustomers() {
                 fullName: res?.fullName ?? "",
                 phone: res?.phone ?? "",
                 dob: res?.dob ?? "",
-                gender: res?.gender ?? "",
+                gender: normalizeGenderValue(res?.gender),
                 avatar: res?.avatar ?? "",
                 status: res?.status ?? "",
             });
@@ -707,7 +709,7 @@ export default function AdminCustomers() {
                                                         fullName: detail?.fullName ?? "",
                                                         phone: detail?.phone ?? "",
                                                         dob: detail?.dob ?? "",
-                                                        gender: detail?.gender ?? "",
+                                                        gender: normalizeGenderValue(detail?.gender),
                                                         avatar: detail?.avatar ?? "",
                                                         status: detail?.status ?? "",
                                                     });
@@ -779,9 +781,7 @@ export default function AdminCustomers() {
                                                     onChange={(e) => setEditForm((p) => ({ ...p, dob: e.target.value }))}
                                                     className="mt-1 w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-500/30"
                                                 />
-                                                <div className="mt-1 text-[11px] text-gray-400">
-                                                    (Chưa hỗ trợ xoá dob — chỉ sửa sang ngày khác)
-                                                </div>
+
                                             </div>
 
                                             <div>
@@ -791,12 +791,11 @@ export default function AdminCustomers() {
                                                     onChange={(e) => setEditForm((p) => ({ ...p, gender: e.target.value }))}
                                                     className="mt-1 w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 outline-none"
                                                 >
-                                                    <option value="">(Không chọn / Xoá)</option>
-                                                    <option value="nam">Nam</option>
-                                                    <option value="nữ">Nữ</option>
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
+                                                    <option value="">(Không chọn)</option>
+                                                    <option value="male">Nam</option>
+                                                    <option value="female">Nữ</option>
                                                 </select>
+
                                             </div>
 
                                             <div className="md:col-span-2">
@@ -807,22 +806,20 @@ export default function AdminCustomers() {
                                                     className="mt-1 w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-500/30"
                                                     placeholder="https://..."
                                                 />
-                                                <div className="mt-1 text-[11px] text-gray-400">
-                                                    Để trống rồi lưu để xoá avatar (backend sẽ set null)
-                                                </div>
+
                                             </div>
 
                                             <div className="md:col-span-2">
                                                 <label className="text-xs text-gray-400 uppercase font-bold">Trạng thái</label>
                                                 <select
-                                                    value={editForm.status ?? ""}
+                                                    value={editForm.status ?? "active"}
                                                     onChange={(e) => setEditForm((p) => ({ ...p, status: e.target.value }))}
                                                     className="mt-1 w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 outline-none"
                                                 >
-                                                    <option value="">(Không đổi)</option>
                                                     <option value="active">Hoạt động</option>
                                                     <option value="locked">Bị khóa</option>
                                                 </select>
+
                                             </div>
                                         </div>
 
