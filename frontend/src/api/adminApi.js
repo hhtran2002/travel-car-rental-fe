@@ -1,56 +1,40 @@
 import axiosClient from "./axiosClient";
 
 export const adminApi = {
-  // --- BOOKING ---
-  getAllBookings: () => {
-    return axiosClient.get("/admin/bookings");
-  },
-  confirmBooking: (id) => {
-    return axiosClient.patch(`/admin/bookings/${id}/confirm`);
-  },
+  // ========== BOOKING ==========
+  getAllBookings: () => axiosClient.get("/admin/bookings"),
 
-  // --- CUSTOMER LIST (search server-side) ---
+  // BE: PUT /api/admin/bookings/{id}/confirm
+  confirmBooking: (id) => axiosClient.put(`/admin/bookings/${id}/confirm`),
+
+  // BE: PUT /api/admin/bookings/{id}/assign-driver  body {driverId}
+  assignDriver: (bookingId, driverId) =>
+    axiosClient.put(`/admin/bookings/${bookingId}/assign-driver`, { driverId }),
+
+  // BE: PUT /api/admin/bookings/{id}/cancel
+  cancelBooking: (id) => axiosClient.put(`/admin/bookings/${id}/cancel`),
+
+  // ========== CUSTOMER LIST (server-side paging/search) ==========
+  // BE: GET /api/admin/customers?keyword=&page=&size=
   getCustomers: (page = 0, size = 10, keyword = "") => {
     const params = new URLSearchParams();
     params.set("page", page);
     params.set("size", size);
-    params.set("sort", "userId,desc");
 
-    if (keyword && keyword.trim()) {
-      params.set("keyword", keyword.trim());
-    }
+    if (keyword && keyword.trim()) params.set("keyword", keyword.trim());
 
     return axiosClient.get(`/admin/customers?${params.toString()}`);
   },
 
-  // --- CUSTOMER DETAIL ---
-  getCustomerById: (id) => {
-    return axiosClient.get(`/admin/customers/${id}`);
-  },
+  // ========== CUSTOMER CRUD ==========
+  getCustomerById: (id) => axiosClient.get(`/admin/customers/${id}`),
+  createCustomer: (payload) => axiosClient.post("/admin/customers", payload),
+  updateCustomer: (id, payload) =>
+    axiosClient.patch(`/admin/customers/${id}`, payload),
 
-  // --- CREATE CUSTOMER ---
-  createCustomer: (payload) => {
-    return axiosClient.post("/admin/customers", payload);
-  },
-
-  // ---UPDATE CUSTOMER ---
-  updateCustomer: (id, payload) => {
-    return axiosClient.patch(`/admin/customers/${id}`, payload);
-  },
-
-
-
-  // --- CAR (XE) ---
-  getAllCars: () => {
-    return axiosClient.get("/cars"); // Public API
-  },
-  createCar: (carData) => {
-    return axiosClient.post("/admin/cars", carData);
-  },
-  updateCar: (id, carData) => {
-    return axiosClient.put(`/admin/cars/${id}`, carData);
-  },
-  deleteCar: (id) => {
-    return axiosClient.delete(`/admin/cars/${id}`);
-  },
+  // ========== CAR ==========
+  getAllCars: () => axiosClient.get("/cars"),
+  createCar: (carData) => axiosClient.post("/admin/cars", carData),
+  updateCar: (id, carData) => axiosClient.put(`/admin/cars/${id}`, carData),
+  deleteCar: (id) => axiosClient.delete(`/admin/cars/${id}`),
 };

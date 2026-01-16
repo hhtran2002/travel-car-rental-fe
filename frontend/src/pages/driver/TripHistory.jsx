@@ -2,6 +2,25 @@
 import { useEffect, useState } from "react";
 import { driverApi } from "../../api/driverApi";
 
+const formatVND = (n) =>
+  new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
+    Number(n || 0)
+  );
+
+const toUiStatus = (t) => {
+  // BE có thể trả: status hoặc tripStatus, thường là lowercase: completed/cancelled/in_progress...
+  const raw = (t.tripStatus ?? t.status ?? "").toString().toLowerCase();
+
+  if (raw === "completed") return "COMPLETED";
+  // BE không có REJECTED thật, thường dùng cancelled cho huỷ / từ chối
+  if (raw === "cancelled" || raw === "canceled") return "REJECTED";
+  if (raw === "in_progress") return "IN_PROGRESS";
+  if (raw === "assigned") return "ASSIGNED";
+  if (raw === "confirmed") return "CONFIRMED";
+  if (raw === "pending") return "ASSIGNED"; // pending đã gán driver coi như assigned UI
+  return raw ? raw.toUpperCase() : "—";
+};
+
 const TripHistory = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,27 +33,35 @@ const TripHistory = () => {
         setErr("");
 
         const res = await driverApi.getHistory();
-
         const arr = Array.isArray(res) ? res : res?.data ?? [];
 
-        // Nếu BE trả field khác, map lại cho đúng UI
-        const normalized = arr.map((t) => ({
-          id: t.id ?? t.tripId ?? t.bookingId,
-          date: t.date ?? t.createdAt ?? "",
-          route:
-            t.route ??
-            `${t.pickupAddress ?? ""} → ${t.dropoffAddress ?? ""}`.trim(),
-          status: t.status,
-          income: t.income ?? t.price ?? t.totalPrice ?? "",
-        }));
+        const normalized = arr.map((t) => {
+          const status = toUiStatus(t);
 
+          return {
+            id: t.id ?? t.tripId ?? t.bookingId,
+            date: t.date ?? t.createdAt ?? t.startDate ?? "",
+            route:
+              t.route ??
+              `${t.pickupLocation ?? t.pickupAddress ?? ""} → ${
+                t.dropoffLocation ?? t.dropoffAddress ?? ""
+              }`.trim(),
+            status,
+            income: t.income ?? t.totalPrice ?? t.price ?? 0,
+          };
+        });
+
+        // Lịch sử: chỉ lấy COMPLETED / REJECTED
         setHistory(
           normalized.filter(
             (t) => t.status === "COMPLETED" || t.status === "REJECTED"
           )
         );
       } catch (e) {
-        setErr("Không tải được lịch sử. Kiểm tra BE/CORS/token.");
+        setErr(
+          e?.response?.data?.message ||
+            "Không tải được lịch sử. Kiểm tra BE/CORS/token."
+        );
       } finally {
         setLoading(false);
       }
@@ -83,7 +110,7 @@ const TripHistory = () => {
                   </td>
 
                   <td className="p-4 text-right font-mono text-[#00FF00]">
-                    {item.income}
+                    {formatVND(item.income)}
                   </td>
                 </tr>
               ))}
