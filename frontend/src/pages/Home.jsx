@@ -7,6 +7,7 @@ export default function Home() {
     return (
         <div className="homePage">
             <div className="container">
+
                 {/* HERO */}
                 <div className="hero">
                     <div
@@ -21,18 +22,26 @@ export default function Home() {
                             <h1 className="heroTitle">
                                 Thuê xe du lịch – Cùng bạn trên mọi hành trình
                             </h1>
+
                             <div className="heroLine" />
+
                             <p className="heroSub">
                                 Đa dạng dòng xe • Giá minh bạch • Đặt xe nhanh chóng
                             </p>
 
-                            {/* CTA */}
                             <div className="heroActions">
                                 <button
                                     className="btnPrimary"
                                     onClick={() => navigate("/cars")}
                                 >
                                     🚗 Xem danh sách xe
+                                </button>
+
+                                <button
+                                    className="btnOutline"
+                                    onClick={() => navigate("/account")}
+                                >
+                                    👤 Tài khoản của tôi
                                 </button>
 
                                 <button
@@ -46,7 +55,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* FEATURE SECTION */}
+                {/* FEATURE */}
                 <div className="miniGrid">
                     <div className="miniCard">
                         <div className="miniIcon">🛡️</div>
@@ -78,6 +87,7 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     );

@@ -21,8 +21,7 @@ export default function Terms() {
                     </h2>
                     <div className="termsContent">
                         <p>
-                            Dịch vụ thuê xe cung cấp giải pháp thuê xe tự lái và xe có tài xế
-                            thông qua hệ thống đặt xe trực tuyến.
+                            Hệ thống thuê xe trực tuyến, cung cấp dịch vụ thuê xe tự lái hoặc xe có tài xế.
                         </p>
                     </div>
                 </section>
@@ -36,8 +35,8 @@ export default function Terms() {
                     <div className="termsContent">
                         <ul>
                             <li>Khách hàng từ 18 tuổi trở lên</li>
+                            <li>Có giấy phép lái xe hợp lệ (nếu tự lái)</li>
                             <li>Tài khoản hợp lệ và đang hoạt động</li>
-                            <li>Cung cấp thông tin chính xác khi đặt xe</li>
                         </ul>
                     </div>
                 </section>
@@ -49,11 +48,12 @@ export default function Terms() {
                         <span className="arrow">⌄</span>
                     </h2>
                     <div className="termsContent">
-                        <p>
-                            Khách hàng nhập điểm đón, điểm trả, thời gian nhận và trả xe
-                            để tìm kiếm và đặt xe phù hợp.
-                        </p>
-                    </div>
+                        <p><strong>Bước 1:</strong> Chọn xe cần thuê.</p>
+                        <p><strong>Bước 2:</strong> Xem chi tiết giá thuê và điều kiện.</p>
+                        <p><strong>Bước 3:</strong> Nhập thông tin đặt xe</p>
+                        <p><strong>Bước 5:</strong> Chọn phương thức thanh toán.</p>
+                        <p><strong>Bước 6:</strong> Xác nhận và hoàn tất đặt xe.</p>
+                        </div>
                 </section>
 
                 {/* 4 */}

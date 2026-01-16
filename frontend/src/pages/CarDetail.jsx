@@ -24,12 +24,31 @@ export default function CarDetail() {
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ===== PHƯƠNG THỨC THUÊ =====
+  const [rentalType, setRentalType] = useState("self_drive");
+
   useEffect(() => {
     getCarDetail(id).then((data) => {
       setCar(data);
       setActiveImage(data.mainImage);
     });
   }, [id]);
+
+  // ===== TÍNH SỐ NGÀY =====
+  const days =
+    startDate && endDate
+      ? Math.ceil(
+          (new Date(endDate) - new Date(startDate)) /
+            (1000 * 60 * 60 * 24)
+        )
+      : 0;
+
+  // ===== TÍNH GIÁ TẠM (AN TOÀN) =====
+  const totalPrice =
+    days > 0 && car?.pricePerDay
+      ? days * Number(car.pricePerDay) +
+        (rentalType === "with_driver" ? 500000 * days : 0)
+      : 0;
 
   const handleBooking = async () => {
     if (!startDate || !endDate || !pickup || !dropoff) {
@@ -47,7 +66,7 @@ export default function CarDetail() {
 
       const booking = await createBooking({
         carId: car.carId,
-        driverId: null,
+        driverId: rentalType === "with_driver" ? 0 : null,
         startDate,
         endDate,
         pickupLocation: pickup,
@@ -64,17 +83,20 @@ export default function CarDetail() {
     }
   };
 
-
   if (!car) return <p>Đang tải...</p>;
 
   return (
     <div className="car-detail">
-      {/* IMAGE SECTION */}
+      {/* ===== IMAGE ===== */}
       <div className="car-gallery">
-        <img className="main-image" src={activeImage} alt={car.modelName} />
+        <img
+          className="main-image"
+          src={activeImage}
+          alt={car.modelName}
+        />
 
         <div className="thumbnail-list">
-          {[car.mainImage, ...car.images].map((img, idx) => (
+          {[car.mainImage, ...(car.images || [])].map((img, idx) => (
             <img
               key={idx}
               src={img}
@@ -86,11 +108,19 @@ export default function CarDetail() {
         </div>
       </div>
 
-      {/* INFO */}
+      {/* ===== INFO ===== */}
       <div className="car-info">
         <h1>{car.modelName}</h1>
         <p>Năm sản xuất: {car.year}</p>
-        <p>Trạng thái: {car.status}</p>
+
+        <p>
+          Giá/ngày:{" "}
+          {car.pricePerDay
+            ? Number(car.pricePerDay).toLocaleString()
+            : "Đang cập nhật"}{" "}
+          VNĐ
+        </p>
+
         <p>Đánh giá: ⭐ {car.rating}</p>
 
         <button className="btn-open-booking" onClick={() => setShowModal(true)}>
@@ -98,11 +128,38 @@ export default function CarDetail() {
         </button>
       </div>
 
-      {/* ===== BOOKING MODAL ===== */}
+      {/* ===== MODAL ===== */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>📅 Thông tin đặt xe</h2>
+
+            <label>Phương thức thuê</label>
+            <div className="rental-type">
+              <label>
+                <input
+                  type="radio"
+                  checked={rentalType === "self_drive"}
+                  onChange={() => setRentalType("self_drive")}
+                />
+                🚗 Tự lái
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  checked={rentalType === "with_driver"}
+                  onChange={() => setRentalType("with_driver")}
+                />
+                👨‍✈️ Có tài xế
+              </label>
+            </div>
+
+            {rentalType === "with_driver" && (
+              <p className="driver-note">
+                ✔ Tài xế sẽ do hệ thống phân công
+              </p>
+            )}
 
             <label>Ngày nhận xe</label>
             <input
@@ -137,6 +194,16 @@ export default function CarDetail() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
+
+            {days > 0 && (
+              <div className="price-preview">
+                <p>Số ngày thuê: <b>{days}</b></p>
+                <p>
+                  Tổng tiền dự kiến:{" "}
+                  <b>{Number(totalPrice).toLocaleString()} VNĐ</b>
+                </p>
+              </div>
+            )}
 
             <div className="modal-actions">
               <button
